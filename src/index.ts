@@ -1,9 +1,20 @@
-export type JsonPrimitive = Null | Boolean | Number | String | Literal<unknown>;
-export type Json = JsonPrimitive | Union | Optional<any> | Array<any> | Object<{[key: string]: Json}>;
+export type Json =
+  Null |
+  Boolean |
+  Number |
+  String |
+  Literal<unknown> |
+  Union |
+  Optional<any> |
+  Array<any> |
+  Object<{[key: string]: Json}>;
 
-type PrimitiveRuntimeType = 'null' | 'boolean' | 'number' | 'string' | {base: 'literal', value: any};
 export type JsonRuntimeType =
-  PrimitiveRuntimeType |
+  'null'    |
+  'boolean' |
+  'number'  |
+  'string'  |
+  {base: 'literal', value: any} |
   {base: 'optional', element: JsonRuntimeType} |
   {base: 'array', element: JsonRuntimeType} |
   {base: 'union', elements: JsonRuntimeType[]} |
