@@ -25,6 +25,10 @@ export type JsObjectType<Obj extends {[key: string]: Json}> = {
   [K in keyof OptionalObj<Obj>]?: Obj[K]['jsType'];
 }
 
+export type JsType<J extends Json> =
+  J extends Object<infer KV> ? JsObjectType<KV>:
+  J['jsType'];
+
 export interface Null {
   jsType: null;
   runtimeType: 'null';
@@ -164,4 +168,36 @@ export function obj<T extends {[key: string]: Json}>(o: T): Object<T> {
       keyValues: keyValues
     }
   }
+}
+
+export function isValid(runtimeType: JsonRuntimeType, obj: any): boolean {
+  switch (runtimeType) {
+    case 'null':
+      return obj === null;
+    case 'boolean':
+      return typeof obj === 'boolean';
+    case 'number':
+      return typeof obj === 'number';
+    case 'string':
+      return typeof obj === 'string';
+    default:
+      switch (runtimeType.base) {
+        case 'literal':
+          return obj === runtimeType.value;
+        case 'optional':
+          return obj === undefined || isValid(runtimeType.element, obj);
+        case "union":
+          return runtimeType.elements.some((t) => isValid(t, obj));
+        case "array":
+        return obj instanceof Array && obj.every((e) => isValid(runtimeType.element, e));
+        case "object":
+          if (obj === null || typeof obj !== 'object') {
+            return false;
+          }
+          return Object.entries(runtimeType.keyValues).every(([key, typ]) =>
+            isValid(typ, obj[key])
+          );
+      }
+  }
+  throw new Error(`Unexpected error in isValid(): ${runtimeType}, ${obj}`);
 }
