@@ -1,6 +1,6 @@
 import * as assert from 'power-assert';
 
-import {nul, bool, num, str, literal, opt, arr, tuple, obj, union, JsType, isValid, validatingParse} from "../src";
+import {nul, bool, num, str, literal, opt, arr, tuple, obj, union, TsType, isValid, validatingParse} from "../src";
 
 
 // Define a format of Human
@@ -26,7 +26,7 @@ const humanFormat = obj({
 });
 
 // Generate Human type
-type Human = JsType<typeof humanFormat>
+type Human = TsType<typeof humanFormat>
 
 describe('ts-json-validator', () => {
   it('should define a human without compile error', () => {

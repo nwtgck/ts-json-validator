@@ -31,52 +31,52 @@ export type JsonRuntimeType =
   {base: 'object', keyValues: {[key: string]: JsonRuntimeType}};
 
 type NonOptionalKeys<Obj extends {[key: string]: Json}> = {
-  [K in keyof Obj]: undefined extends Obj[K]['jsType'] ? never : K
+  [K in keyof Obj]: undefined extends Obj[K]['tsType'] ? never : K
 }[keyof Obj];
 
 type OptionalKeys<Obj extends {[key: string]: Json}> = {
-  [K in keyof Obj]:  undefined extends Obj[K]['jsType'] ? K: never;
+  [K in keyof Obj]:  undefined extends Obj[K]['tsType'] ? K: never;
 }[keyof Obj];
 
 type NonOptionalObj<Obj extends {[key: string]: Json}> = Pick<Obj, NonOptionalKeys<Obj>>;
 type OptionalObj<Obj extends {[key: string]: Json}> = Pick<Obj, OptionalKeys<Obj>>;
 export type JsObjectType<Obj extends {[key: string]: Json}> = {
-  [K in keyof NonOptionalObj<Obj>]: Obj[K]['jsType'];
+  [K in keyof NonOptionalObj<Obj>]: Obj[K]['tsType'];
 } & {
-  [K in keyof OptionalObj<Obj>]?: Obj[K]['jsType'];
+  [K in keyof OptionalObj<Obj>]?: Obj[K]['tsType'];
 }
 
-export type JsType<J extends Json> =
+export type TsType<J extends Json> =
   J extends Object<infer KV> ? JsObjectType<KV>:
-  J['jsType'];
+  J['tsType'];
 
 export interface Null {
-  jsType: null;
+  tsType: null;
   runtimeType: 'null';
 }
 
 export interface Boolean {
-  jsType: boolean;
+  tsType: boolean;
   runtimeType: 'boolean';
 }
 
 export interface Number {
-  jsType: number
+  tsType: number
   runtimeType: 'number';
 }
 
 export interface String {
-  jsType: string;
+  tsType: string;
   runtimeType: 'string';
 }
 
 export interface Literal<Lit> {
-  jsType: Lit;
+  tsType: Lit;
   runtimeType: JsonRuntimeType;
 }
 
 export interface Optional<T extends Json> {
-  jsType: T['jsType'] | undefined
+  tsType: T['tsType'] | undefined
   runtimeType: {
     base: 'optional',
     element: JsonRuntimeType
@@ -84,7 +84,7 @@ export interface Optional<T extends Json> {
 }
 
 export interface Array<T extends Json> {
-  jsType: T['jsType'][];
+  tsType: T['tsType'][];
   runtimeType: {
     base: 'array',
     element: JsonRuntimeType
@@ -92,40 +92,40 @@ export interface Array<T extends Json> {
 }
 
 export interface Object<O extends {[key: string]: Json}> {
-  jsType: { [K in keyof O]: O[K]['jsType'] };
+  tsType: { [K in keyof O]: O[K]['tsType'] };
   runtimeType: {
     base: 'object',
     keyValues: {[key: string]: JsonRuntimeType}
   }
 }
 
-export const nul: Null = {jsType: null, runtimeType: 'null'};
+export const nul: Null = {tsType: null, runtimeType: 'null'};
 
-// NOTE: jsType has a dummy value
-export const bool: Boolean = {jsType: false, runtimeType: 'boolean'};
+// NOTE: tsType has a dummy value
+export const bool: Boolean = {tsType: false, runtimeType: 'boolean'};
 
-// NOTE: jsType has a dummy value
-export const num: Number = {jsType: 0, runtimeType: 'number'};
+// NOTE: tsType has a dummy value
+export const num: Number = {tsType: 0, runtimeType: 'number'};
 
-// NOTE: jsType has a dummy value
-export const str: String = {jsType: '', runtimeType: 'string'};
+// NOTE: tsType has a dummy value
+export const str: String = {tsType: '', runtimeType: 'string'};
 
 export function literal<Lit>(literal: Lit): Literal<Lit> {
-  return {jsType: literal, runtimeType: {base: 'literal', value: literal}}
+  return {tsType: literal, runtimeType: {base: 'literal', value: literal}}
 }
 
 export function opt<T extends Json>(elem: T): Optional<T> {
-  // NOTE: jsType has a dummy value
+  // NOTE: tsType has a dummy value
   return {
-    jsType: undefined,
+    tsType: undefined,
     runtimeType: {base: 'optional', element: elem.runtimeType}
   }
 }
 
 export function arr<T extends Json>(elem: T): Array<T> {
-  // NOTE: jsType has a dummy value
+  // NOTE: tsType has a dummy value
   return {
-    jsType: [],
+    tsType: [],
     runtimeType: {base: 'array', element: elem.runtimeType}
   };
 }
@@ -136,7 +136,7 @@ export function obj<T extends {[key: string]: Json}>(o: T): Object<T> {
     keyValues[key] = value.runtimeType;
   }
   return {
-    jsType: {} as any,
+    tsType: {} as any,
     runtimeType: {
       base: 'object',
       keyValues: keyValues
@@ -180,10 +180,10 @@ export function isValid(runtimeType: JsonRuntimeType, obj: any): boolean {
   throw new Error(`Unexpected error in isValid(): ${runtimeType}, ${obj}`);
 }
 
-export function validate<J extends Json>(format: J, obj: any): JsType<J> | undefined {
+export function validate<J extends Json>(format: J, obj: any): TsType<J> | undefined {
   return isValid(format.runtimeType, obj) ? obj: undefined;
 }
 
-export function validatingParse<J extends Json>(format: J, jsonString: string): JsType<J> | undefined {
+export function validatingParse<J extends Json>(format: J, jsonString: string): TsType<J> | undefined {
   return validate(format, JSON.parse(jsonString));
 }
