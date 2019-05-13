@@ -1,4 +1,5 @@
 import {Union} from "./union";
+import {Tuple} from "./tuple";
 
 // Export all union
 export * from "./union";
@@ -12,6 +13,7 @@ export type Json =
   String |
   Literal<unknown> |
   Union |
+  Tuple |
   Optional<any> |
   Array<any> |
   Object<{[key: string]: Json}>;
