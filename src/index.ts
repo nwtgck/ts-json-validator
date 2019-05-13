@@ -1,6 +1,10 @@
 import {Union} from "./union";
+import {Tuple} from "./tuple";
 
+// Export all union
 export * from "./union";
+// Export all tuple
+export * from "./tuple";
 
 export type Json =
   Null |
@@ -9,6 +13,7 @@ export type Json =
   String |
   Literal<unknown> |
   Union |
+  Tuple |
   Optional<any> |
   Array<any> |
   Object<{[key: string]: Json}>;
@@ -21,6 +26,7 @@ export type JsonRuntimeType =
   {base: 'literal', value: any} |
   {base: 'optional', element: JsonRuntimeType} |
   {base: 'array', element: JsonRuntimeType} |
+  {base: 'tuple', elements: JsonRuntimeType[]} |
   {base: 'union', elements: JsonRuntimeType[]} |
   {base: 'object', keyValues: {[key: string]: JsonRuntimeType}};
 
@@ -157,7 +163,11 @@ export function isValid(runtimeType: JsonRuntimeType, obj: any): boolean {
         case "union":
           return runtimeType.elements.some((t) => isValid(t, obj));
         case "array":
-        return obj instanceof Array && obj.every((e) => isValid(runtimeType.element, e));
+          return obj instanceof Array && obj.every((e) => isValid(runtimeType.element, e));
+        case "tuple":
+          return obj instanceof Array &&
+                 runtimeType.elements.length === obj.length &&
+                 runtimeType.elements.every((typ, i) => isValid(typ, obj[i]));
         case "object":
           if (obj === null || typeof obj !== 'object') {
             return false;
