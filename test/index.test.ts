@@ -1,6 +1,6 @@
 import * as assert from 'power-assert';
 
-import {nul, bool, num, str, literal, opt, arr, obj, union, JsType, isValid, validatingParse} from "../src";
+import {nul, bool, num, str, literal, opt, arr, tuple, obj, union, JsType, isValid, validatingParse} from "../src";
 
 
 // Define a format of Human
@@ -22,6 +22,7 @@ const humanFormat = obj({
   myLitUnion: union(literal('POST' as const), literal('GET' as const)),
   myNullable: union(str, nul),
   onlyNull: nul,
+  myTuple: tuple(str, num, bool),
 });
 
 // Generate Human type
@@ -46,7 +47,8 @@ describe('ts-json-validator', () => {
       myLit: 'POST',
       myLitUnion: 'GET',
       myNullable: 'hey',
-      onlyNull: null
+      onlyNull: null,
+      myTuple: ['my text', 14, false],
     };
   });
 
@@ -89,6 +91,12 @@ describe('ts-json-validator', () => {
       assert.strictEqual(isValid(objFormat.runtimeType, true), false);
     });
 
+    it('should validate should tuple', () => {
+      const objFormat = tuple(str, num);
+      assert.strictEqual(isValid(objFormat.runtimeType, ['hello', 40]), true);
+      assert.strictEqual(isValid(objFormat.runtimeType, ['hello', true]), false);
+    });
+
     it('should validate should array', () => {
       const objFormat = arr(str);
       const obj1 = ['hello', 'world'];
@@ -125,7 +133,8 @@ describe('ts-json-validator', () => {
         myLit: 'POST',
         myLitUnion: 'GET',
         myNullable: 'hey',
-        onlyNull: null
+        onlyNull: null,
+        myTuple: ['my text', 14, false],
       };
       assert.strictEqual(isValid(humanFormat.runtimeType, human), true);
     });
