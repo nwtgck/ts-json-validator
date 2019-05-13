@@ -1,6 +1,6 @@
 import * as assert from 'power-assert';
 
-import {nul, bool, num, str, literal, opt, arr, obj, union, JsType, isValid} from "../src";
+import {nul, bool, num, str, literal, opt, arr, obj, union, JsType, isValid, validatingParse} from "../src";
 
 
 // Define a format of Human
@@ -128,6 +128,23 @@ describe('ts-json-validator', () => {
         onlyNull: null
       };
       assert.strictEqual(isValid(humanFormat.runtimeType, human), true);
+    });
+  });
+
+  context('validatingParse', () => {
+    it('should parse with validation', () => {
+      const objFormat = obj({
+        name: str,
+        age: num
+      });
+      const json1: string = '{"name": "jack", "age": 4}';
+      assert.deepStrictEqual(validatingParse(objFormat, json1), {name: "jack", age: 4});
+      // NOTE: age is true not number
+      const json2: string = '{"name": "jack", "age": true}';
+      assert.deepStrictEqual(validatingParse(objFormat, json2), undefined);
+      // NOTE: isHuman is not defined in format but parsed
+      const json3: string = '{"name": "jack", "age": 4, "isHuman": true}';
+      assert.deepStrictEqual(validatingParse(objFormat, json3), {name: "jack", age: 4, isHuman: true});
     });
   });
 });

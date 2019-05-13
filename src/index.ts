@@ -201,3 +201,11 @@ export function isValid(runtimeType: JsonRuntimeType, obj: any): boolean {
   }
   throw new Error(`Unexpected error in isValid(): ${runtimeType}, ${obj}`);
 }
+
+export function validate<J extends Json>(format: J, obj: any): JsType<J> | undefined {
+  return isValid(format.runtimeType, obj) ? obj: undefined;
+}
+
+export function validatingParse<J extends Json>(format: J, jsonString: string): JsType<J> | undefined {
+  return validate(format, JSON.parse(jsonString));
+}
