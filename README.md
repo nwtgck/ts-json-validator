@@ -5,6 +5,12 @@ Safer `JSON.parse()` validating by TypeScript types
 
 Write a format of JSON once, Derive the type automatically in compile-time.
 
+## Installation
+
+```bash
+npm install -S git+https://github.com/nwtgck/ts-json-validator#v0.1.2
+```
+
 ## Basic Usage
 
 ```ts
