@@ -30,25 +30,7 @@ export type JsonRuntimeType =
   {base: 'union', elements: JsonRuntimeType[]} |
   {base: 'object', keyValues: {[key: string]: JsonRuntimeType}};
 
-type NonOptionalKeys<Obj extends {[key: string]: Json}> = {
-  [K in keyof Obj]: undefined extends Obj[K]['tsType'] ? never : K
-}[keyof Obj];
-
-type OptionalKeys<Obj extends {[key: string]: Json}> = {
-  [K in keyof Obj]:  undefined extends Obj[K]['tsType'] ? K: never;
-}[keyof Obj];
-
-type NonOptionalObj<Obj extends {[key: string]: Json}> = Pick<Obj, NonOptionalKeys<Obj>>;
-type OptionalObj<Obj extends {[key: string]: Json}> = Pick<Obj, OptionalKeys<Obj>>;
-export type JsObjectType<Obj extends {[key: string]: Json}> = {
-  [K in keyof NonOptionalObj<Obj>]: Obj[K]['tsType'];
-} & {
-  [K in keyof OptionalObj<Obj>]?: Obj[K]['tsType'];
-}
-
-export type TsType<J extends Json> =
-  J extends Object<infer KV> ? JsObjectType<KV>:
-  J['tsType'];
+export type TsType<J extends Json> = J['tsType'];
 
 export interface Null {
   tsType: null;
@@ -91,8 +73,23 @@ export interface Array<T extends Json> {
   };
 }
 
+type NonOptionalKeys<Obj extends {[key: string]: Json}> = {
+  [K in keyof Obj]: undefined extends Obj[K]['tsType'] ? never : K
+}[keyof Obj];
+
+type OptionalKeys<Obj extends {[key: string]: Json}> = {
+  [K in keyof Obj]: undefined extends Obj[K]['tsType'] ? K: never;
+}[keyof Obj];
+
+type NonOptionalObj<Obj extends {[key: string]: Json}> = Pick<Obj, NonOptionalKeys<Obj>>;
+type OptionalObj<Obj extends {[key: string]: Json}> = Pick<Obj, OptionalKeys<Obj>>;
+
 export interface Object<O extends {[key: string]: Json}> {
-  tsType: { [K in keyof O]: O[K]['tsType'] };
+  tsType: {
+    [K in keyof NonOptionalObj<O>]: O[K]['tsType'];
+  } & {
+    [K in keyof OptionalObj<O>]?: O[K]['tsType'];
+  };
   runtimeType: {
     base: 'object',
     keyValues: {[key: string]: JsonRuntimeType}

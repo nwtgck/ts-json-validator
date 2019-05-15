@@ -52,6 +52,25 @@ describe('ts-json-validator', () => {
     };
   });
 
+  it('should define optional property in object array without compile error', () => {
+    // NOTE: This structure found in JsonWebKey
+    const myFormat = obj({
+      oth: arr( obj({
+        r: opt(str),
+      })),
+    });
+    type myFormatType = TsType<typeof myFormat>;
+
+    type TypeMyFormat = {
+      oth: {
+        d?: string
+      }[];
+    }
+
+    const a: TypeMyFormat = {oth: []};
+    const b: myFormatType = a;
+  });
+
   context('isValid', () => {
     it('should validate null', () => {
       const objFormat = nul;
