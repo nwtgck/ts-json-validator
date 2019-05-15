@@ -3,7 +3,7 @@
 
 Safer `JSON.parse()` validating by TypeScript types
 
-Write a format of JSON once, Derive the type automatically in compile-time.
+Write a format of JSON once, Derive the type automatically at compile-time.
 
 ## Installation
 
@@ -21,7 +21,7 @@ const personFormat = obj({
 });
 
 // Generate Person type
-// IMPORTANT: Type is derived in compile-time. Just a write format once!
+// IMPORTANT: Type is derived at compile-time. Just a write format once!
 type Person = TsType<typeof personFormat>;
 
 
@@ -75,7 +75,7 @@ const myObj1Format = obj({
 
 
 // Generate MyObj1 type
-// IMPORTANT: Type is derived in compile-time. Just write a format once!
+// IMPORTANT: Type is derived at compile-time. Just write a format once!
 type MyObj1 = TsType<typeof myObj1Format>;
 ```
 
@@ -83,7 +83,7 @@ In Union Type, `T1 | T2 | ... | T64` is supported. In tuple, `[T1, T2, ..., T64]
 
 ## Type-safety
 
-You can find errors in compile-time, not runtime!
+You can find errors at compile-time, not runtime!
 
 ### Wrong type in the array
 `myStrs` should be an string array, but `128` is included.  
