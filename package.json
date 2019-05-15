@@ -2,8 +2,8 @@
   "name": "ts-json-validator",
   "version": "0.1.0",
   "description": "JSON Validator for TypeScript",
-  "main": "dist/lib/index.js",
-  "types": "dist/lib/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
