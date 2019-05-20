@@ -14,6 +14,8 @@ npm install -S git+https://github.com/nwtgck/ts-json-validator#v0.1.2
 ## Basic Usage
 
 ```ts
+import {nul, bool, num, str, literal, opt, arr, tuple, obj, union, TsType, validatingParse} from 'ts-json-validator';
+
 // Create a format
 const personFormat = obj({
   name: str,
@@ -46,6 +48,8 @@ isValid(personFormat.runtimeType, myObj2);
 
 
 ```ts
+import {nul, bool, num, str, literal, opt, arr, tuple, obj, union, TsType, validatingParse} from 'ts-json-validator';
+
 // Create a format
 const myObj1Format = obj({
   // String array - string[]
