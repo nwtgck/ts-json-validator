@@ -44,6 +44,10 @@ isValid(personFormat.runtimeType, myObj2);
 // => false (because type of age should be number)
 ```
 
+## Core feature
+
+The main feature is that **`type Person` is automatically derived**. So you just define the format/structure object of JSON such as `personFormat`. Then you can get a `type` for free.
+
 ## Usage of Array, nested objects, Literal Types, Union Types and Tuples
 
 
