@@ -44,7 +44,7 @@ isValid(personFormat.runtimeType, myObj2);
 // => false (because type of age should be number)
 ```
 
-## Example of Array/nested objects/Literal Types/Union Types/Tuples
+## Usage of Array, nested objects, Literal Types, Union Types and Tuples
 
 
 ```ts
