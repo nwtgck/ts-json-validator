@@ -22,7 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/power-assert": "^1.5.1",
+    "@types/power-assert": "^1.5.2",
     "mocha": "^6.2.2",
     "power-assert": "^1.4.4",
     "ts-node": "^8.5.4",
