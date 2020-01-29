@@ -21,7 +21,7 @@
   "author": "Ryo Ota",
   "license": "MIT",
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.1",
     "@types/power-assert": "^1.5.3",
     "mocha": "^7.0.1",
     "power-assert": "^1.4.4",
