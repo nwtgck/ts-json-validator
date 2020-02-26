@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/mocha": "^7.0.1",
     "@types/power-assert": "^1.5.3",
-    "mocha": "^7.0.1",
+    "mocha": "^7.1.0",
     "power-assert": "^1.4.4",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.2"
